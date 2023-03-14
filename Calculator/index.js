@@ -86,7 +86,7 @@ function handleCurrentInput(inputValue) {
             break
 
         case '=':
-            const newValue = eval(displayInput.value);
+            const newValue = evaluation.calculate(displayInput.value)
             displayInput.value = newValue
             break
 
@@ -103,3 +103,79 @@ function handleCurrentInput(inputValue) {
             break
     }
 }
+
+
+
+class EvaluateExpression {
+    trimSpaces(str) {
+        let newStr = "";
+        let i = 0;
+        while (i < str.length) {
+            if (str[i] !== ' ') {
+                newStr += str[i]
+            }
+            i++;
+        }
+        return newStr;
+    }
+
+    cal(stack, currentNumber, sign) {
+        if (sign === '+') {
+            stack.push(currentNumber);
+        }
+        else if (sign === '-') {
+            stack.push(-currentNumber);
+        }
+        else if (sign === '/') {
+            stack[stack.length - 1] > 0 ? stack.push(Math.floor(stack.pop() / currentNumber)) : stack.push(Math.ceil(stack.pop() / currentNumber));
+        }
+        else if (sign === '*') {
+            stack.push(stack.pop() * currentNumber);
+        }
+        else if (sign === '%') {
+            stack.push(stack.pop() % currentNumber);
+        }
+    }
+
+    calculate(s) {
+        s = this.trimSpaces(s);
+        let stack = [];
+        let stackSignPair = [];
+        let sign = '+';
+        for (let i = 0; i < s.length; i++) {
+            if (!isNaN(Number(s[i]))) {
+                let currentNumber = "";
+                while (!isNaN(Number(s[i]))) {
+                    currentNumber += s[i]
+                    i++;
+                }
+
+                i--;
+                currentNumber = Number(currentNumber);
+                this.cal(stack, currentNumber, sign);
+
+            }
+            else if (s[i] === "(") {
+
+                stackSignPair.push([stack, sign]);
+                stack = [];
+                sign = '+'
+            }
+            else if (s[i] === ")") {
+
+                let currentNumber = stack.reduce((acc, curr) => acc += curr, 0)
+                let getPair = stackSignPair.pop();
+                [stack, sign] = getPair;
+                this.cal(stack, currentNumber, sign)
+            }
+            else {
+                sign = s[i];
+            }
+        }
+
+        let acc = stack.reduce((acc, curr) => acc += curr, 0)
+        return acc;
+    };
+}
+
+let evaluation = new EvaluateExpression();
