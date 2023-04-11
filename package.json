@@ -1,0 +1,22 @@
+{
+  "name": "learning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack --env NODE_ENV = 'production' ",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.0",
+    "svg-inline-loader": "^0.8.2",
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.2"
+  }
+}
